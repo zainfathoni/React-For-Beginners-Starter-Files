@@ -17,6 +17,7 @@ class App extends React.Component {
     this.addToOrder = this.addToOrder.bind(this);
     this.removeFromOrder = this.removeFromOrder.bind(this);
 
+    // getinitialState
     this.state = {
       fishes: {},
       order: {}
@@ -24,13 +25,16 @@ class App extends React.Component {
   }
 
   componentWillMount() {
+    // this runs right before the <App> is rendered
     this.ref = base.syncState(`${this.props.params.storeId}/fishes`, {
       context: this,
       state: 'fishes',
     });
 
+    // check if there is any order in localStorage
     const localStorageRef = localStorage.getItem(`order-${this.props.params.storeId}`);
     if (localStorageRef) {
+      // update our App component's order state
       this.setState({
         order: JSON.parse(localStorageRef)
       });
@@ -49,9 +53,12 @@ class App extends React.Component {
   }
 
   addFish(fish) {
+    // update our state
     const fishes = {...this.state.fishes};
+    // add in our new fish
     const timestamp = Date.now();
     fishes[`fish-${timestamp}`] = fish;
+    // set state
     this.setState({ fishes });
   }
 
@@ -74,8 +81,11 @@ class App extends React.Component {
   }
 
   addToOrder(key) {
+    // take a copy of our state
     const order = {...this.state.order};
+    // update or add the new number of fish ordered
     order[key] = order[key] + 1 || 1;
+    // update our state
     this.setState({ order });
   }
 
